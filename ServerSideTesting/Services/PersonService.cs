@@ -8,7 +8,8 @@ namespace ServerSide.Services
 {
     public interface IPersonService
     {
-        IEnumerable<Person> findAll();
+        IEnumerable<Person> FindAll();
+        Person GetById(int id);
     }
 
     public class PersonService : IPersonService
@@ -22,10 +23,19 @@ namespace ServerSide.Services
         }
 
 
-        public IEnumerable<Person> findAll()
+        public IEnumerable<Person> FindAll()
         {
-            return this._repository.findAll();
+            return this._repository.FindAll();
         }
 
+        public Person GetById(int id)
+        {
+            var entity = _repository.GetById(id);
+
+            if (entity == null)
+                throw new NotFoundException($"The person ({id}) was not found.");
+
+            return entity;
+        }
     }
 }

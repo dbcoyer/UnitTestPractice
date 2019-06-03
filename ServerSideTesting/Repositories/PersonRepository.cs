@@ -8,7 +8,8 @@ namespace ServerSide.Repositories
     public interface IPersonRepository
     {
         
-        IEnumerable<Person> findAll();
+        IEnumerable<Person> FindAll();
+        Person GetById(int id);
     }
 
     public class PersonRepository : IPersonRepository
@@ -25,11 +26,15 @@ namespace ServerSide.Repositories
 
             this.context = context;
         }
-        public IEnumerable<Person> findAll()
+        public IEnumerable<Person> FindAll()
         {
             return context.People.AsEnumerable();
         }
 
-        
+        public Person GetById(int id)
+        {
+            return context.People.FirstOrDefault(x => x.Id == id);
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ServerSide.Exceptions;
 using ServerSide.Models;
 using ServerSide.Services;
 
@@ -18,19 +19,29 @@ namespace ServerSide.Controllers
         {
             _personService = personService;
         }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<List<Person>> findAll()
+        public ActionResult<List<Person>> FindAll()
         {
-            var people = _personService.findAll();
+            var people = _personService.FindAll();
             return Ok(people);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Person> Get(int id)
         {
-            return "value";
+            Person person = null;
+
+            try
+            {
+                person = _personService.GetById(id);
+            } catch (NotFoundException ex) {
+                return NotFound(ex.Message);
+            }
+
+            return Ok(person);
         }
 
         // POST api/values
